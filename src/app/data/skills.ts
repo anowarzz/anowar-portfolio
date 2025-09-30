@@ -47,11 +47,11 @@ export const frontendSkills = [
 export const backendSkills = [
   { name: "Node.js", icon: nodejsIcon },
   { name: "Express.js", icon: expressIcon },
+  { name: "Firebase", icon: firebaseIcon },
   { name: "Prisma", icon: prismaIcon },
 ];
 
 export const databaseSkills = [
   { name: "MongoDB", icon: mongodbIcon },
-  { name: "Firebase", icon: firebaseIcon },
   { name: "PostgreSQL", icon: postgresIcon },
 ];

@@ -45,9 +45,13 @@ export default function Education() {
 
       <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-12">
-          <h3 className="text-4xl font-bold text-white mb-4">
-            Educational Background
-          </h3>
+            <h3 className="text-4xl font-bold text-white mb-4">
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+              Educational
+            </span>
+            {" "}
+            Background
+            </h3>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
             Equipped with business knowledge and skills.
           </p>

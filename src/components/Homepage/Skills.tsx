@@ -25,7 +25,10 @@ export default function Skills() {
       <div className="relative z-10 container mx-auto px-4">
         <div className="text-center mb-12">
           <h2 className="text-4xl font-bold text-white mb-4">
-            Skills & Technologies
+            <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+              Skills
+            </span>{" "}
+            & Technologies
           </h2>
           <p className="text-lg text-white/70 max-w-2xl mx-auto">
             Technologies I work with to bring ideas to life.
