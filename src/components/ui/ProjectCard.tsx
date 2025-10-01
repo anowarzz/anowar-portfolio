@@ -1,25 +1,13 @@
 "use client";
 
 import { Button } from "@/components/ui/button";
+import { IProject } from "@/types";
 import { ArrowBigRight, ExternalLink, Github } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 
-interface Project {
-  _id: string;
-  title: string;
-  image: string;
-  projectType: string;
-  projectSummary: string;
-  gitHubLink: string;
-  liveSiteLink: string;
-  technologies: string[];
-  details: string[];
-  images: string[];
-}
-
 interface ProjectCardProps {
-  project: Project;
+  project: IProject;
 }
 
 export function ProjectCard({ project }: ProjectCardProps) {

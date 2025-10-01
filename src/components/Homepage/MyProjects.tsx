@@ -1,7 +1,7 @@
 "use client";
 import { ProjectCard } from "@/components/ui/ProjectCard";
 import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { useProjects } from "@/services/projectService/getProjects";
+import { useProjects } from "@/services/projectService/getAllProjects";
 import { ArrowBigRight } from "lucide-react";
 import Link from "next/link";
 
