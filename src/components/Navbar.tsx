@@ -12,10 +12,12 @@ import {
 import { Github, Linkedin, Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useState } from "react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const pathname = usePathname();
 
   const navLinks = [
     { href: "/", label: "Home" },
@@ -25,8 +27,22 @@ const Navbar = () => {
     { href: "/#contact", label: "Contact Me" },
   ];
 
+  const isActiveLink = (href: string) => {
+    if (href === "/") {
+      return pathname === "/";
+    }
+    if (href.startsWith("/#")) {
+      return (
+        pathname === "/" &&
+        typeof window !== "undefined" &&
+        window.location.hash === href.substring(1)
+      );
+    }
+    return pathname === href;
+  };
+
   return (
-    <nav className="w-full  backdrop-blur bg-white  border-b z-50">
+    <nav className="w-full sticky top-0 backdrop-blur bg-white/90 border-b z-50">
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 sm:h-18 items-center justify-between">
           {/* Logo */}
@@ -45,7 +61,11 @@ const Navbar = () => {
               <Link
                 key={link.href}
                 href={link.href}
-                className="text-foreground hover:text-primary transition-colors duration-200 font-medium"
+                className={`font-medium transition-colors duration-200 ${
+                  isActiveLink(link.href)
+                    ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
+                    : "text-foreground hover:text-primary"
+                }`}
               >
                 {link.label}
               </Link>
@@ -103,7 +123,11 @@ const Navbar = () => {
                       <Link
                         key={link.href}
                         href={link.href}
-                        className="text-lg font-medium text-foreground hover:text-primary transition-colors duration-200 py-2 px-3 rounded-md hover:bg-accent/50 -mx-3"
+                        className={`text-lg font-medium transition-colors duration-200 py-2 px-3 rounded-md -mx-3 ${
+                          isActiveLink(link.href)
+                            ? "text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400"
+                            : "text-foreground hover:text-primary hover:bg-accent/50"
+                        }`}
                         onClick={() => setIsOpen(false)}
                       >
                         {link.label}
