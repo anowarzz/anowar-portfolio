@@ -1,11 +1,11 @@
 "use client";
 
+import { Button } from "@/components/ui/button";
 import {
   AnimatedSpan,
   Terminal,
   TypingAnimation,
 } from "@/components/ui/terminal";
-import { Button } from "@/components/ui/button";
 import { ArrowRight, Download } from "lucide-react";
 import Link from "next/link";
 import { TypeAnimation } from "react-type-animation";
@@ -92,7 +92,7 @@ const HeroSection = () => {
                   className="w-fit border-2 border-white/50 text-white bg-black/20 hover:bg-white/10 hover:text-blue-600 hover:border-white/80 backdrop-blur-sm transition-all duration-300 group font-semibold"
                 >
                   <a
-                    href="https://drive.google.com/uc?export=download&id=1L91axf8PlFcvxvf1w7pQkncPGr89xCeB"
+                    href="https://drive.google.com/uc?export=download&id=14RnGBGtLdgZ2bee01lI6PI2gZK9v4-bx"
                     download="anowar_resume.pdf"
                     className="flex items-center gap-2"
                   >
