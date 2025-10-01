@@ -1,0 +1,99 @@
+/* Custom styles for react-image-gallery to match the dark theme */
+
+.image-gallery {
+  background-color: transparent;
+}
+
+.image-gallery-slide img {
+  border-radius: 1rem;
+  object-fit: cover;
+  max-height: 70vh;
+}
+
+.image-gallery-thumbnail img {
+  border-radius: 0.5rem;
+  object-fit: cover;
+  width: 100%;
+  height: 100%;
+}
+
+.image-gallery-thumbnail {
+  width: 80px !important;
+  height: 60px !important;
+  margin: 0 2px !important;
+}
+
+.image-gallery-thumbnail.active,
+.image-gallery-thumbnail:focus {
+  border: 2px solid #60a5fa;
+  box-shadow: 0 0 0 2px rgba(96, 165, 250, 0.5);
+}
+
+.image-gallery-thumbnail:hover {
+  border-color: #93c5fd;
+}
+
+.image-gallery-left-nav,
+.image-gallery-right-nav {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.image-gallery-left-nav:hover,
+.image-gallery-right-nav:hover {
+  background-color: rgba(96, 165, 250, 0.2);
+  border-color: #60a5fa;
+}
+
+.image-gallery-fullscreen-button,
+.image-gallery-play-button {
+  background-color: rgba(0, 0, 0, 0.7);
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+  margin-left: 0.5rem;
+}
+
+.image-gallery-fullscreen-button:hover,
+.image-gallery-play-button:hover {
+  background-color: rgba(96, 165, 250, 0.2);
+  border-color: #60a5fa;
+}
+
+.image-gallery-index {
+  background-color: rgba(0, 0, 0, 0.8);
+  color: white;
+  padding: 0.5rem 1rem;
+  border-radius: 1rem;
+  font-size: 0.875rem;
+  border: 1px solid rgba(96, 165, 250, 0.3);
+}
+
+.image-gallery-thumbnails-container {
+  margin-top: 1rem;
+}
+
+.image-gallery-thumbnails {
+  padding: 0;
+}
+
+.image-gallery-thumbnails .image-gallery-thumbnails-container {
+  text-align: center;
+}
+
+
+.image-gallery-play-button {
+  display: none;
+}
