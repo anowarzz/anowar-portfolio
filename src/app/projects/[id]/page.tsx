@@ -23,7 +23,7 @@ const ProjectDetailsPage = () => {
     const fetchProject = async () => {
       try {
         const project = await getSingleProject(id as string);
-        setProject(project);
+        setProject(project.data);
       } catch (err) {
         if (err instanceof Error && err.message === "Project not found") {
           setError("Project not found");

@@ -1,17 +1,17 @@
 import { useEffect, useState } from "react";
-import { IProject } from "../../types";
+import { IProject, IProjectResponse } from "../../types";
 
-export async function getAllProjects(): Promise<IProject[]> {
+export async function getAllProjects(): Promise<IProjectResponse> {
   try {
     const response = await fetch(
-      "https://anowarzz-portfolio-backend.vercel.app/api/projects"
+      `${process.env.NEXT_PUBLIC_BASE_URL}/projects`
     );
 
     if (!response.ok) {
       throw new Error(`Something went wrong: ${response.status}`);
     }
 
-    const projects: IProject[] = await response.json();
+    const projects : IProjectResponse = await response.json();
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);
@@ -28,7 +28,7 @@ export function useProjects() {
     const fetchProjects = async () => {
       try {
         const data = await getAllProjects();
-        setProjects(data);
+        setProjects(data.data);
       } catch (err) {
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {

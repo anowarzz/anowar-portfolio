@@ -1,6 +1,5 @@
 export interface IProject {
-  _id: string;
-  id: string;
+  id: number;
   title: string;
   image: string;
   projectType: string;
@@ -10,4 +9,20 @@ export interface IProject {
   technologies: string[];
   details: string[];
   images: string[];
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface IProjectResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: IProject[];
+}
+
+export interface ISingleProjectResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: IProject;
 }

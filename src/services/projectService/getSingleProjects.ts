@@ -1,11 +1,13 @@
 // get single project details
 
-import { IProject } from "@/types";
+import { ISingleProjectResponse } from "@/types";
 
-export async function getSingleProject(id: string): Promise<IProject> {
+export async function getSingleProject(
+  id: string
+): Promise<ISingleProjectResponse> {
   try {
     const response = await fetch(
-      `https://anowarzz-portfolio-backend.vercel.app/api/projects/${id}`
+      `${process.env.NEXT_PUBLIC_BASE_URL}/projects/${id}`
     );
 
     if (!response.ok) {
@@ -16,7 +18,7 @@ export async function getSingleProject(id: string): Promise<IProject> {
       }
     }
 
-    const project: IProject = await response.json();
+    const project: ISingleProjectResponse = await response.json();
     return project;
   } catch (error) {
     console.error("Error fetching single project:", error);
