@@ -112,7 +112,7 @@ const ProjectDetailsPage = () => {
             className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            Back to Projects
+            Back to All Projects
           </Link>
         </div>
 
