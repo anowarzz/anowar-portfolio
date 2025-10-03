@@ -1,5 +1,6 @@
+import anowarzzLogo from "@/assets/images/anowarzz-logo.svg";
+import { BookOpen, Eye, FileText, Folder, FolderPlus } from "lucide-react";
 import * as React from "react";
-
 
 import {
   Sidebar,
@@ -13,133 +14,55 @@ import {
   SidebarMenuItem,
   SidebarRail,
 } from "@/components/ui/sidebar";
+import Image from "next/image";
+import Link from "next/link";
 
 // This is sample data.
 const data = {
-  versions: ["1.0.1", "1.1.0-alpha", "2.0.0-beta1"],
   navMain: [
     {
-      title: "Getting Started",
-      url: "#",
+      title: "Dashboard",
+      url: "/admin-control",
       items: [
         {
-          title: "Installation",
+          title: "Overview",
           url: "#",
-        },
-        {
-          title: "Project Structure",
-          url: "#",
+          icon: Eye,
+          isActive: false,
         },
       ],
     },
     {
-      title: "Building Your Application",
-      url: "#",
+      title: "Projects Management",
       items: [
         {
-          title: "Routing",
-          url: "#",
+          title: "Add New Project",
+          url: "/admin-control/add-project",
+          icon: FolderPlus,
+          isActive: false,
         },
         {
-          title: "Data Fetching",
-          url: "#",
-          isActive: true,
-        },
-        {
-          title: "Rendering",
-          url: "#",
-        },
-        {
-          title: "Caching",
-          url: "#",
-        },
-        {
-          title: "Styling",
-          url: "#",
-        },
-        {
-          title: "Optimizing",
-          url: "#",
-        },
-        {
-          title: "Configuring",
-          url: "#",
-        },
-        {
-          title: "Testing",
-          url: "#",
-        },
-        {
-          title: "Authentication",
-          url: "#",
-        },
-        {
-          title: "Deploying",
-          url: "#",
-        },
-        {
-          title: "Upgrading",
-          url: "#",
-        },
-        {
-          title: "Examples",
-          url: "#",
+          title: "All Project",
+          url: "/admin-control/all-project",
+          icon: Folder,
+          isActive: false,
         },
       ],
     },
     {
-      title: "API Reference",
-      url: "#",
+      title: "Blogs Management",
       items: [
         {
-          title: "Components",
-          url: "#",
+          title: "Add New Blog",
+          url: "/admin-control/add-blog",
+          icon: FileText,
+          isActive: false,
         },
         {
-          title: "File Conventions",
-          url: "#",
-        },
-        {
-          title: "Functions",
-          url: "#",
-        },
-        {
-          title: "next.config.js Options",
-          url: "#",
-        },
-        {
-          title: "CLI",
-          url: "#",
-        },
-        {
-          title: "Edge Runtime",
-          url: "#",
-        },
-      ],
-    },
-    {
-      title: "Architecture",
-      url: "#",
-      items: [
-        {
-          title: "Accessibility",
-          url: "#",
-        },
-        {
-          title: "Fast Refresh",
-          url: "#",
-        },
-        {
-          title: "Next.js Compiler",
-          url: "#",
-        },
-        {
-          title: "Supported Browsers",
-          url: "#",
-        },
-        {
-          title: "Turbopack",
-          url: "#",
+          title: "All Blogs",
+          url: "/admin-control/all-blogs",
+          icon: BookOpen,
+          isActive: false,
         },
       ],
     },
@@ -150,7 +73,15 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-
+        <Link href="/admin-control">
+          <Image
+            src={anowarzzLogo}
+            height={60}
+            width={100}
+            alt="Anowarzz Logo"
+            className="mx-auto"
+          />
+        </Link>
       </SidebarHeader>
       <SidebarContent>
         {/* We create a SidebarGroup for each parent. */}
@@ -162,7 +93,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>{item.title}</a>
+                      <a href={item.url}>
+                        <item.icon className="w-4 h-4" />
+                        <span>{item.title}</span>
+                      </a>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
