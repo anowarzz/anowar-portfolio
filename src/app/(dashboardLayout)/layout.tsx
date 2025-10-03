@@ -26,7 +26,7 @@ export default function AdminLayout({
               <SidebarTrigger className="-ml-1 text-white hover:bg-white" />
               <Separator
                 orientation="vertical"
-                className="mr-2 h-4 bg-white/20"
+                className="mr-2 h-2 bg-white/10"
               />
               <div className="flex w-full items-center justify-between gap-2">
                 <h2 className="text-lg font-semibold text-white">

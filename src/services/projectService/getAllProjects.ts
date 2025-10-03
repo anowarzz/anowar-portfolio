@@ -1,3 +1,5 @@
+"use client";
+
 import { useEffect, useState } from "react";
 import { IProject, IProjectResponse } from "../../types";
 
@@ -11,7 +13,7 @@ export async function getAllProjects(): Promise<IProjectResponse> {
       throw new Error(`Something went wrong: ${response.status}`);
     }
 
-    const projects : IProjectResponse = await response.json();
+    const projects: IProjectResponse = await response.json();
     return projects;
   } catch (error) {
     console.error("Error fetching projects:", error);

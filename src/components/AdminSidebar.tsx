@@ -1,4 +1,4 @@
-import anowarzzLogo from "@/assets/images/anowarzz-logo.svg";
+import anowarzzLogo from "@/assets/images/anowar-dash-logo.svg";
 import { BookOpen, Eye, FileText, Folder, FolderPlus } from "lucide-react";
 import * as React from "react";
 
@@ -22,11 +22,10 @@ const data = {
   navMain: [
     {
       title: "Dashboard",
-      url: "/admin-control",
       items: [
         {
           title: "Overview",
-          url: "#",
+          url: "/admin-control",
           icon: Eye,
           isActive: false,
         },
@@ -42,8 +41,8 @@ const data = {
           isActive: false,
         },
         {
-          title: "All Project",
-          url: "/admin-control/all-project",
+          title: "All Projects",
+          url: "/admin-control/all-projects",
           icon: Folder,
           isActive: false,
         },
@@ -54,7 +53,7 @@ const data = {
       items: [
         {
           title: "Add New Blog",
-          url: "/admin-control/add-blog",
+          url: "/admin-control/add-blog-post",
           icon: FileText,
           isActive: false,
         },
@@ -93,10 +92,10 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
                 {item.items.map((item) => (
                   <SidebarMenuItem key={item.title}>
                     <SidebarMenuButton asChild isActive={item.isActive}>
-                      <a href={item.url}>
+                      <Link href={item.url}>
                         <item.icon className="w-4 h-4" />
                         <span>{item.title}</span>
-                      </a>
+                      </Link>
                     </SidebarMenuButton>
                   </SidebarMenuItem>
                 ))}
