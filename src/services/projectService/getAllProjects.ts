@@ -26,20 +26,26 @@ export function useProjects() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    const fetchProjects = async () => {
-      try {
-        const data = await getAllProjects();
-        setProjects(data.data);
-      } catch (err) {
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
-      }
-    };
+  const fetchProjects = async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const data = await getAllProjects();
+      setProjects(data.data);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "An error occurred");
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     fetchProjects();
   }, []);
 
-  return { projects, loading, error };
+  const refetch = () => {
+    fetchProjects();
+  };
+
+  return { projects, loading, error, refetch };
 }
