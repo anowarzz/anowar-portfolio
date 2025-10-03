@@ -72,7 +72,7 @@ export function AppSidebar({ ...props }: React.ComponentProps<typeof Sidebar>) {
   return (
     <Sidebar {...props}>
       <SidebarHeader>
-        <Link href="/admin-control">
+        <Link href="/">
           <Image
             src={anowarzzLogo}
             height={60}
