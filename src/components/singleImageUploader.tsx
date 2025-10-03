@@ -4,17 +4,23 @@ import { AlertCircleIcon, ImageUpIcon, XIcon } from "lucide-react";
 
 import { useFileUpload } from "@/hooks/use-file-upload";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface SingleImageUploaderProps {
   onImageChange?: (file: File | null) => void;
+  initialImageUrl?: string;
+  initialImageName?: string;
 }
 
 export default function SingleImageUploader({
   onImageChange,
+  initialImageUrl,
+  initialImageName,
 }: SingleImageUploaderProps) {
   const maxSizeMB = 3;
   const maxSize = maxSizeMB * 1024 * 1024; // 3MB
+
+  const [showInitialImage, setShowInitialImage] = useState(!!initialImageUrl);
 
   const [
     { files, isDragging, errors },
@@ -33,12 +39,24 @@ export default function SingleImageUploader({
   });
 
   const previewUrl = files[0]?.preview || null;
+  const displayUrl = previewUrl || (showInitialImage ? initialImageUrl : null);
+  const displayName =
+    files[0]?.file?.name || initialImageName || "Current image";
 
-  // Call onImageChange when files change
+  // Call onImageChange when files change or initial image is removed
   useEffect(() => {
     const file = files[0]?.file instanceof File ? files[0].file : null;
     onImageChange?.(file);
   }, [files, onImageChange]);
+
+  const handleRemoveImage = () => {
+    if (files[0]) {
+      removeFile(files[0].id);
+    } else if (showInitialImage) {
+      setShowInitialImage(false);
+      onImageChange?.(null);
+    }
+  };
 
   return (
     <div className="flex flex-col gap-2">
@@ -59,11 +77,11 @@ export default function SingleImageUploader({
             className="sr-only"
             aria-label="Upload file"
           />
-          {previewUrl ? (
+          {displayUrl ? (
             <div className="absolute inset-0">
               <Image
-                src={previewUrl}
-                alt={files[0]?.file?.name || "Uploaded image"}
+                src={displayUrl}
+                alt={displayName}
                 className="size-full object-cover"
                 layout="fill"
                 objectFit="contain"
@@ -86,12 +104,12 @@ export default function SingleImageUploader({
             </div>
           )}
         </div>
-        {previewUrl && (
+        {displayUrl && (
           <div className="absolute top-4 right-4">
             <button
               type="button"
               className="focus-visible:border-ring focus-visible:ring-ring/50 z-50 flex size-8 cursor-pointer items-center justify-center rounded-full bg-black/60 text-white transition-[color,box-shadow] outline-none hover:bg-black/80 focus-visible:ring-[3px]"
-              onClick={() => removeFile(files[0]?.id)}
+              onClick={handleRemoveImage}
               aria-label="Remove image"
             >
               <XIcon className="size-4" aria-hidden="true" />

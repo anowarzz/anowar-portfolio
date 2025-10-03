@@ -1,16 +1,6 @@
 "use client";
 
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from "@/components/ui/alert-dialog";
+import { ConfirmationDialog } from "@/components/ConfirmationDialog";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -21,6 +11,7 @@ import {
 } from "@/components/ui/card";
 import { useProjects } from "@/services/projectService/getAllProjects";
 import { Edit, Eye, FolderKanban, Plus, Trash2 } from "lucide-react";
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { toast } from "sonner";
@@ -44,9 +35,7 @@ const AllProjects = () => {
         throw new Error(`Failed to delete project: ${response.status}`);
       }
 
-      toast.success("Project deleted successfully!", {
-        description: "The project has been removed from your portfolio.",
-      });
+      toast.success("Project deleted successfully!");
 
       // Refresh the projects list
       refetch();
@@ -130,8 +119,19 @@ const AllProjects = () => {
           {projects.map((project) => (
             <Card key={project.id} className="bg-gray-800/50 border-gray-700">
               <CardHeader>
-                <CardTitle className="text-white">{project.title}</CardTitle>
-                <CardDescription className="line-clamp-2">
+                <CardTitle className="text-white text-center">
+                  {project.title}
+                </CardTitle>
+                <div className="flex justify-center mb-4">
+                  <Image
+                    src={project.image}
+                    alt={project.title}
+                    width={200}
+                    height={120}
+                    className="object-cover rounded-md w-48 h-28"
+                  />
+                </div>
+                <CardDescription className="line-clamp-2 text-center">
                   {project.projectSummary}
                 </CardDescription>
               </CardHeader>
@@ -182,51 +182,24 @@ const AllProjects = () => {
                           <Edit className="w-4 h-4" />
                         </Button>
                       </Link>
-                      <AlertDialog>
-                        <AlertDialogTrigger asChild>
-                          <Button
-                            size="sm"
-                            variant="destructive"
-                            title="Delete Project"
-                          >
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </AlertDialogTrigger>
-                        <AlertDialogContent className="bg-gray-900 border-gray-700">
-                          <AlertDialogHeader>
-                            <AlertDialogTitle className="text-white">
-                              Delete Project
-                            </AlertDialogTitle>
-                            <AlertDialogDescription className="text-gray-300">
-                              Are you sure you want to delete &quot;
-                              {project.title}&quot;? This action cannot be
-                              undone and will permanently remove the project
-                              from your portfolio.
-                            </AlertDialogDescription>
-                          </AlertDialogHeader>
-                          <AlertDialogFooter>
-                            <AlertDialogCancel className="bg-gray-700 text-white border-gray-600 hover:bg-gray-600">
-                              Cancel
-                            </AlertDialogCancel>
-                            <AlertDialogAction
-                              onClick={() =>
-                                handleDeleteProject(String(project.id))
-                              }
-                              className="bg-red-600 text-white hover:bg-red-700"
-                              disabled={deletingId === String(project.id)}
-                            >
-                              {deletingId === String(project.id) ? (
-                                <>
-                                  <div className="animate-spin rounded-full h-4 w-4 border-b-2 border-white mr-2"></div>
-                                  Deleting...
-                                </>
-                              ) : (
-                                "Delete Project"
-                              )}
-                            </AlertDialogAction>
-                          </AlertDialogFooter>
-                        </AlertDialogContent>
-                      </AlertDialog>
+                      <ConfirmationDialog
+                        description={`Are you sure you want to delete "${project.title}"? This action cannot be undone and will permanently remove the project from your portfolio.`}
+                        onConfirm={() =>
+                          handleDeleteProject(String(project.id))
+                        }
+                        isLoading={deletingId === String(project.id)}
+                        title="Delete Project"
+                        confirmText="Delete Project"
+                        loadingText="Deleting..."
+                      >
+                        <Button
+                          size="sm"
+                          variant="destructive"
+                          title="Delete Project"
+                        >
+                          <Trash2 className="w-4 h-4" />
+                        </Button>
+                      </ConfirmationDialog>
                     </div>
                     <span className="text-xs text-gray-400">
                       {new Date(project.createdAt).toLocaleDateString()}

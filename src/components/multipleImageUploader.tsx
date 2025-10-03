@@ -4,20 +4,24 @@ import { Button } from "@/components/ui/button";
 import { formatBytes, useFileUpload } from "@/hooks/use-file-upload";
 import { AlertCircleIcon, ImageIcon, UploadIcon, XIcon } from "lucide-react";
 import Image from "next/image";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 interface MultipleImageUploaderProps {
-  onFilesChange?: (files: File[]) => void;
+  onFilesChange?: (files: File[], remainingInitialImages: string[]) => void;
   maxFiles?: number;
   maxSizeMB?: number;
+  initialImages?: string[];
 }
 
 export default function MultipleImageUploader({
   onFilesChange,
   maxFiles = 6,
   maxSizeMB = 3,
+  initialImages = [],
 }: MultipleImageUploaderProps) {
   const maxSize = maxSizeMB * 1024 * 1024; // Convert MB to bytes
+  const [currentInitialImages, setCurrentInitialImages] =
+    useState(initialImages);
 
   const [
     { files, isDragging, errors },
@@ -39,13 +43,17 @@ export default function MultipleImageUploader({
     initialFiles: [],
   });
 
-  // Call onFilesChange when files change
+  const removeInitialImage = (index: number) => {
+    setCurrentInitialImages((prev) => prev.filter((_, i) => i !== index));
+  };
+
+  // Call onFilesChange when files change or initial images are removed
   useEffect(() => {
     const actualFiles = files
       .map((fileItem) => fileItem.file)
       .filter((file) => file instanceof File) as File[];
-    onFilesChange?.(actualFiles);
-  }, [files, onFilesChange]);
+    onFilesChange?.(actualFiles, currentInitialImages);
+  }, [files, currentInitialImages, onFilesChange]);
 
   return (
     <div className="flex flex-col gap-2">
@@ -99,9 +107,56 @@ export default function MultipleImageUploader({
         </div>
       )}
 
-      {/* File list */}
+      {/* Initial images list */}
+      {currentInitialImages.length > 0 && (
+        <div className="space-y-2">
+          <p className="text-white/70 text-sm font-medium">Current images:</p>
+          {currentInitialImages.map((imageUrl, index) => (
+            <div
+              key={`initial-${index}`}
+              className="bg-white/5 flex items-center justify-between gap-2 rounded-lg border border-white/10 p-2 pe-3"
+            >
+              <div className="flex items-center gap-3 overflow-hidden">
+                <div className="bg-white/10 aspect-square shrink-0 rounded">
+                  <Image
+                    src={imageUrl}
+                    alt={`Gallery image ${index + 1}`}
+                    width={40}
+                    height={40}
+                    className="size-10 rounded-[inherit] object-cover"
+                  />
+                </div>
+                <div className="flex min-w-0 flex-col gap-0.5">
+                  <p className="truncate text-[13px] font-medium text-white">
+                    Gallery image {index + 1}
+                  </p>
+                  <p className="text-white/50 text-xs">Current image</p>
+                </div>
+              </div>
+
+              <Button
+                size="icon"
+                variant="ghost"
+                className="text-white/50 hover:text-white -me-2 size-8 hover:bg-white/10"
+                onClick={() => removeInitialImage(index)}
+                aria-label="Remove image"
+                type="button"
+              >
+                <XIcon aria-hidden="true" />
+              </Button>
+            </div>
+          ))}
+        </div>
+      )}
+
+      {/* New files list */}
       {files.length > 0 && (
         <div className="space-y-2">
+          {currentInitialImages.length > 0 && (
+            <p className="text-white/70 text-sm font-medium">
+              New images to add:
+            </p>
+          )}
           {files.map((file) => (
             <div
               key={file.id}
@@ -150,7 +205,7 @@ export default function MultipleImageUploader({
                 className="border-white/20 text-white hover:bg-white/10 hover:text-white"
                 type="button"
               >
-                Remove all files
+                Remove all new files
               </Button>
             </div>
           )}
@@ -162,7 +217,8 @@ export default function MultipleImageUploader({
         role="region"
         className="text-white/50 mt-2 text-center text-xs"
       >
-        {files.length} / {maxFiles} images selected
+        {currentInitialImages.length + files.length} / {maxFiles} images total (
+        {currentInitialImages.length} current, {files.length} new)
       </p>
     </div>
   );
