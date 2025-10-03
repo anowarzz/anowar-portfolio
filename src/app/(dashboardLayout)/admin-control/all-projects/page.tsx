@@ -130,9 +130,15 @@ const AllProjects = () => {
                           <Eye className="w-4 h-4" />
                         </Button>
                       </Link>
-                      <Button size="sm" variant="outline" title="Edit Project">
-                        <Edit className="w-4 h-4" />
-                      </Button>
+                      <Link href={`/admin-control/edit-project/${project.id}`}>
+                        <Button
+                          size="sm"
+                          variant="outline"
+                          title="Edit Project"
+                        >
+                          <Edit className="w-4 h-4" />
+                        </Button>
+                      </Link>
                       <Button
                         size="sm"
                         variant="destructive"
