@@ -26,3 +26,41 @@ export interface ISingleProjectResponse {
   message: string;
   data: IProject;
 }
+
+export interface IBlogAuthor {
+  id: number;
+  username: string;
+  email: string;
+}
+
+export interface IBlogPost {
+  id: number;
+  title: string;
+  slug: string;
+  content: string;
+  excerpt: string;
+  featuredImage: string;
+  isFeatured: boolean;
+  isDeleted: boolean;
+  views: number;
+  tags: string[];
+  category: string;
+  authorUsername: string;
+  createdAt: string;
+  updatedAt: string;
+  author: IBlogAuthor;
+}
+
+export interface IBlogListResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: IBlogPost[];
+}
+
+export interface ISingleBlogResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: IBlogPost;
+}
