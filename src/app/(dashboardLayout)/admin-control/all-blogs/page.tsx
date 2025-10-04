@@ -210,16 +210,31 @@ const AllBlogs = () => {
                     </div>
 
                     <div className="flex space-x-1">
-                      <Link href={`/blogs/${blog.slug || blog.id}`}>
+                      {blog.slug ? (
+                        <Link href={`/blogs/${blog.slug}`}>
+                          <Button
+                            size="sm"
+                            variant="outline"
+                            title="View Blog Post"
+                            className="h-7 w-7 p-0"
+                            onClick={() =>
+                              console.log("Navigating to blog slug:", blog.slug)
+                            }
+                          >
+                            <Eye className="w-3 h-3" />
+                          </Button>
+                        </Link>
+                      ) : (
                         <Button
                           size="sm"
                           variant="outline"
-                          title="View Blog Post"
-                          className="h-7 w-7 p-0"
+                          title="No slug available"
+                          className="h-7 w-7 p-0 opacity-50"
+                          disabled
                         >
                           <Eye className="w-3 h-3" />
                         </Button>
-                      </Link>
+                      )}
                       <Link href={`/admin-control/edit-blog/${blog.id}`}>
                         <Button
                           size="sm"

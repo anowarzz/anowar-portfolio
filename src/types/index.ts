@@ -1,3 +1,5 @@
+import { ConfirmationDialog } from '@/components/ConfirmationDialog';
+import { ReactNode } from 'react';
 export interface IProject {
   id: number;
   title: string;
@@ -71,4 +73,16 @@ export interface ISingleBlogResponse {
   success: boolean;
   message: string;
   data: IBlogPost;
+}
+
+
+export interface ConfirmationDialogProps {
+  children: ReactNode;
+  description: string;
+  onConfirm: () => void;
+  isLoading?: boolean;
+  title?: string;
+  confirmText?: string;
+  cancelText?: string;
+  loadingText?: string;
 }

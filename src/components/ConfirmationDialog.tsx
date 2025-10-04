@@ -9,19 +9,8 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import type { ReactNode } from "react";
+import { ConfirmationDialogProps } from "@/types";
 import { useEffect, useState } from "react";
-
-interface IProps {
-  children: ReactNode;
-  description: string;
-  onConfirm: () => void;
-  isLoading?: boolean;
-  title?: string;
-  confirmText?: string;
-  cancelText?: string;
-  loadingText?: string;
-}
 
 export function ConfirmationDialog({
   children,
@@ -32,16 +21,14 @@ export function ConfirmationDialog({
   confirmText = "Continue",
   cancelText = "Cancel",
   loadingText = "Processing...",
-}: IProps) {
+}: ConfirmationDialogProps) {
   const [open, setOpen] = useState(false);
   const [wasLoading, setWasLoading] = useState(false);
 
-  // Track loading state changes
   useEffect(() => {
     if (isLoading) {
       setWasLoading(true);
     } else if (wasLoading && !isLoading) {
-      // Loading just finished, show success briefly then close
       const timer = setTimeout(() => {
         setOpen(false);
         setWasLoading(false);

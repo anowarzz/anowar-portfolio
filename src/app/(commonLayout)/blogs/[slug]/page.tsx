@@ -10,9 +10,9 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 
 interface BlogDetailPageProps {
-  params: {
+  params: Promise<{
     slug: string;
-  };
+  }>;
 }
 
 const BlogDetailPage = ({ params }: BlogDetailPageProps) => {
@@ -25,9 +25,12 @@ const BlogDetailPage = ({ params }: BlogDetailPageProps) => {
       try {
         setLoading(true);
         setError(null);
-        const response = await getSingleBlog(params.slug);
+        const resolvedParams = await params;
+        console.log("Blog detail page received slug:", resolvedParams.slug);
+        const response = await getSingleBlog(resolvedParams.slug);
         setBlog(response.data);
       } catch (err) {
+        console.error("Error in blog detail page:", err);
         setError(err instanceof Error ? err.message : "An error occurred");
       } finally {
         setLoading(false);
@@ -35,7 +38,7 @@ const BlogDetailPage = ({ params }: BlogDetailPageProps) => {
     };
 
     fetchBlog();
-  }, [params.slug]);
+  }, [params]);
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
