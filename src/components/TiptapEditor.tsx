@@ -50,7 +50,7 @@ const TiptapEditor = ({
     editorProps: {
       attributes: {
         class:
-          "prose prose-sm sm:prose lg:prose-lg xl:prose-xl focus:outline-none min-h-[300px] max-w-none p-4",
+          "prose prose-sm sm:prose lg:prose-lg xl:prose-xl prose-invert focus:outline-none min-h-[300px] max-w-none p-4 text-white",
       },
     },
     immediatelyRender: false,
@@ -76,24 +76,17 @@ const TiptapEditor = ({
     }
   };
 
-  const addImage = () => {
-    const url = window.prompt("Enter image URL:");
-    if (url) {
-      editor.chain().focus().setImage({ src: url }).run();
-    }
-  };
-
   return (
-    <div className="border border-gray-200 rounded-xl overflow-hidden">
+    <div className="border border-white/20 rounded-xl overflow-hidden bg-black/20 backdrop-blur">
       {/* Toolbar */}
-      <div className="bg-gray-50 border-b border-gray-200 p-3 flex flex-wrap gap-1">
+      <div className="bg-black/40 border-b border-white/20 p-3 flex flex-wrap gap-1">
         {/* Text Formatting */}
-        <div className="flex gap-1 border-r border-gray-300 pr-2">
+        <div className="flex gap-1 border-r border-white/20 pr-2">
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleBold().run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("bold") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("bold") ? "bg-blue-500/20 text-blue-300" : ""
             }`}
             title="Bold (Ctrl+B)"
           >
@@ -102,8 +95,8 @@ const TiptapEditor = ({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleItalic().run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("italic") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("italic") ? "bg-blue-500/20 text-blue-300" : ""
             }`}
             title="Italic (Ctrl+I)"
           >
@@ -112,8 +105,8 @@ const TiptapEditor = ({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleUnderline().run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("underline") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("underline") ? "bg-blue-500/20 text-blue-300" : ""
             }`}
             title="Underline (Ctrl+U)"
           >
@@ -122,8 +115,8 @@ const TiptapEditor = ({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleStrike().run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("strike") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("strike") ? "bg-blue-500/20 text-blue-300" : ""
             }`}
             title="Strikethrough"
           >
@@ -132,14 +125,16 @@ const TiptapEditor = ({
         </div>
 
         {/* Headings */}
-        <div className="flex gap-1 border-r border-gray-300 pr-2">
+        <div className="flex gap-1 border-r border-white/20 pr-2">
           <button
             type="button"
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 1 }).run()
             }
-            className={`px-2 py-1 rounded text-sm font-semibold hover:bg-gray-200 transition-colors ${
-              editor.isActive("heading", { level: 1 }) ? "bg-gray-300" : ""
+            className={`px-2 py-1 rounded text-sm font-semibold hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("heading", { level: 1 })
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Heading 1"
           >
@@ -150,8 +145,10 @@ const TiptapEditor = ({
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 2 }).run()
             }
-            className={`px-2 py-1 rounded text-sm font-semibold hover:bg-gray-200 transition-colors ${
-              editor.isActive("heading", { level: 2 }) ? "bg-gray-300" : ""
+            className={`px-2 py-1 rounded text-sm font-semibold hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("heading", { level: 2 })
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Heading 2"
           >
@@ -162,8 +159,10 @@ const TiptapEditor = ({
             onClick={() =>
               editor.chain().focus().toggleHeading({ level: 3 }).run()
             }
-            className={`px-2 py-1 rounded text-sm font-semibold hover:bg-gray-200 transition-colors ${
-              editor.isActive("heading", { level: 3 }) ? "bg-gray-300" : ""
+            className={`px-2 py-1 rounded text-sm font-semibold hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("heading", { level: 3 })
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Heading 3"
           >
@@ -172,12 +171,14 @@ const TiptapEditor = ({
         </div>
 
         {/* Lists */}
-        <div className="flex gap-1 border-r border-gray-300 pr-2">
+        <div className="flex gap-1 border-r border-white/20 pr-2">
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleBulletList().run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("bulletList") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("bulletList")
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Bullet List"
           >
@@ -188,8 +189,10 @@ const TiptapEditor = ({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleOrderedList().run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("orderedList") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("orderedList")
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Numbered List"
           >
@@ -200,12 +203,14 @@ const TiptapEditor = ({
         </div>
 
         {/* Quotes & Code */}
-        <div className="flex gap-1 border-r border-gray-300 pr-2">
+        <div className="flex gap-1 border-r border-white/20 pr-2">
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleBlockquote().run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("blockquote") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("blockquote")
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Quote"
           >
@@ -220,8 +225,8 @@ const TiptapEditor = ({
           <button
             type="button"
             onClick={() => editor.chain().focus().toggleCodeBlock().run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("codeBlock") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("codeBlock") ? "bg-blue-500/20 text-blue-300" : ""
             }`}
             title="Code Block"
           >
@@ -236,12 +241,12 @@ const TiptapEditor = ({
         </div>
 
         {/* Links & Images */}
-        <div className="flex gap-1 border-r border-gray-300 pr-2">
+        <div className="flex gap-1 border-r border-white/20 pr-2">
           <button
             type="button"
             onClick={addLink}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive("link") ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive("link") ? "bg-blue-500/20 text-blue-300" : ""
             }`}
             title="Add Link"
           >
@@ -253,29 +258,17 @@ const TiptapEditor = ({
               />
             </svg>
           </button>
-          <button
-            type="button"
-            onClick={addImage}
-            className="p-2 rounded hover:bg-gray-200 transition-colors"
-            title="Add Image"
-          >
-            <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
-              <path
-                fillRule="evenodd"
-                d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
         </div>
 
         {/* Text Align */}
-        <div className="flex gap-1 border-r border-gray-300 pr-2">
+        <div className="flex gap-1 border-r border-white/20 pr-2">
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("left").run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive({ textAlign: "left" }) ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive({ textAlign: "left" })
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Align Left"
           >
@@ -290,8 +283,10 @@ const TiptapEditor = ({
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("center").run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive({ textAlign: "center" }) ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive({ textAlign: "center" })
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Align Center"
           >
@@ -306,8 +301,10 @@ const TiptapEditor = ({
           <button
             type="button"
             onClick={() => editor.chain().focus().setTextAlign("right").run()}
-            className={`p-2 rounded hover:bg-gray-200 transition-colors ${
-              editor.isActive({ textAlign: "right" }) ? "bg-gray-300" : ""
+            className={`p-2 rounded hover:bg-white/10 transition-colors text-white ${
+              editor.isActive({ textAlign: "right" })
+                ? "bg-blue-500/20 text-blue-300"
+                : ""
             }`}
             title="Align Right"
           >
@@ -327,7 +324,7 @@ const TiptapEditor = ({
             type="button"
             onClick={() => editor.chain().focus().undo().run()}
             disabled={!editor.can().undo()}
-            className="p-2 rounded hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 rounded hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="Undo (Ctrl+Z)"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -342,7 +339,7 @@ const TiptapEditor = ({
             type="button"
             onClick={() => editor.chain().focus().redo().run()}
             disabled={!editor.can().redo()}
-            className="p-2 rounded hover:bg-gray-200 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+            className="p-2 rounded hover:bg-white/10 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             title="Redo (Ctrl+Shift+Z)"
           >
             <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
@@ -357,7 +354,10 @@ const TiptapEditor = ({
       </div>
 
       {/* Editor Content */}
-      <EditorContent editor={editor} className="bg-white" />
+      <EditorContent
+        editor={editor}
+        className="bg-white/5 text-white min-h-[300px]"
+      />
     </div>
   );
 };

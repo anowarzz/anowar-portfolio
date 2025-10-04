@@ -146,7 +146,7 @@ const AllBlogs = () => {
                     src={blog.featuredImage}
                     alt={blog.title}
                     fill
-                    className="object-cover transition-transform hover:scale-105"
+                    className="object-contain transition-transform hover:scale-105"
                   />
                   {blog.isFeatured && (
                     <Badge

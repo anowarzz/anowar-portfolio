@@ -167,75 +167,66 @@ const AddBlogPost = () => {
         toastOptions={{
           duration: 3000,
           style: {
-            background: "#363636",
-            color: "#fff",
+            background: "rgba(0, 0, 0, 0.8)",
+            color: "#ffffff",
+            border: "1px solid rgba(255, 255, 255, 0.2)",
+            borderRadius: "12px",
+            backdropFilter: "blur(10px)",
           },
           success: {
             duration: 3000,
             iconTheme: {
-              primary: "#4ade80",
-              secondary: "#fff",
+              primary: "#10b981",
+              secondary: "#ffffff",
             },
           },
           error: {
             duration: 4000,
             iconTheme: {
               primary: "#ef4444",
-              secondary: "#fff",
+              secondary: "#ffffff",
             },
           },
         }}
       />
 
-      <div className="min-h-screen bg-gradient-to-br from-slate-50 to-slate-100 p-6">
-        <div className="max-w-4xl mx-auto">
+      <div className="space-y-6 p-6">
+        <div className="max-w-4xl mx-auto space-y-6">
           {/* Header */}
-          <div className="bg-white rounded-2xl shadow-xl p-8 mb-8">
-            <div className="flex items-center gap-4 mb-2">
-              <div className="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center">
-                <svg
-                  className="w-6 h-6 text-white"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24"
-                >
-                  <path
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    strokeWidth={2}
-                    d="M15.232 5.232l3.536 3.536m-2.036-5.036a2.5 2.5 0 113.536 3.536L6.5 21.036H3v-3.572L16.732 3.732z"
-                  />
-                </svg>
-              </div>
-              <h1 className="text-3xl font-bold text-gray-800">
-                Create New Blog Post
+          <div className="flex items-center justify-between">
+            <div className="space-y-1">
+              <h1 className="text-3xl font-bold text-white">
+                Create New{" "}
+                <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                  Blog Post
+                </span>
               </h1>
+              <p className="text-white/70">
+                Share your thoughts and insights with your audience
+              </p>
             </div>
-            <p className="text-gray-600">
-              Share your thoughts and insights with your audience
-            </p>
           </div>
 
           {/* Form */}
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-8">
             {/* Basic Information */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+            <div className="bg-black/40 border-white/10 backdrop-blur rounded-xl p-8">
+              <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
                 <div className="w-2 h-6 bg-gradient-to-b from-blue-500 to-purple-600 rounded-full"></div>
                 Basic Information
               </h2>
 
               <div className="grid md:grid-cols-2 gap-6">
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Blog Title *
                   </label>
                   <input
                     type="text"
                     onKeyDown={handleKeyDown}
                     {...register("title")}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                      errors.title ? "border-red-500" : "border-gray-200"
+                    className={`w-full px-4 py-3 bg-white/5 border border-white/20 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-white/50 ${
+                      errors.title ? "border-red-500" : "border-white/20"
                     }`}
                     placeholder="Enter an engaging title for your blog post"
                   />
@@ -247,14 +238,14 @@ const AddBlogPost = () => {
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Category
                   </label>
                   <select
                     {...register("category")}
                     onKeyDown={handleKeyDown}
-                    className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
-                      errors.category ? "border-red-500" : "border-gray-200"
+                    className={`w-full px-4 py-3 bg-white/5 border border-white/20 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 ${
+                      errors.category ? "border-red-500" : "border-white/20"
                     }`}
                   >
                     <option value="">Select Category</option>
@@ -276,7 +267,7 @@ const AddBlogPost = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Featured Image
                   </label>
                   <SingleImageUploader
@@ -286,7 +277,7 @@ const AddBlogPost = () => {
                 </div>
 
                 <div className="md:col-span-2">
-                  <label className="block text-sm font-medium text-gray-700 mb-2">
+                  <label className="block text-sm font-medium text-white mb-2">
                     Tags
                   </label>
                   <input
@@ -294,20 +285,20 @@ const AddBlogPost = () => {
                     value={tagInput}
                     onChange={(e) => setTagInput(e.target.value)}
                     onKeyDown={handleAddTag}
-                    className="w-full px-4 py-3 border border-gray-200 rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200"
+                    className="w-full px-4 py-3 bg-white/5 border border-white/20 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 placeholder:text-white/50"
                     placeholder="Type a tag and press Enter"
                   />
                   <div className="flex flex-wrap gap-2 mt-3">
                     {watch("tags").map((tag, index) => (
                       <span
                         key={index}
-                        className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-100 text-blue-800"
+                        className="inline-flex items-center px-3 py-1 rounded-full text-sm bg-blue-500/20 text-blue-300 border border-blue-500/30"
                       >
                         {tag}
                         <button
                           type="button"
                           onClick={() => removeTag(tag)}
-                          className="ml-2 text-blue-600 hover:text-blue-800"
+                          className="ml-2 text-blue-300 hover:text-blue-100"
                         >
                           ×
                         </button>
@@ -323,7 +314,7 @@ const AddBlogPost = () => {
                       {...register("isFeatured")}
                       className="w-5 h-5 text-blue-600 border-gray-300 rounded focus:ring-blue-500"
                     />
-                    <span className="text-sm font-medium text-gray-700">
+                    <span className="text-sm font-medium text-white">
                       Mark as Featured Post
                     </span>
                   </label>
@@ -332,8 +323,8 @@ const AddBlogPost = () => {
             </div>
 
             {/* Excerpt */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+            <div className="bg-black/40 border-white/10 backdrop-blur rounded-xl p-8">
+              <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
                 <div className="w-2 h-6 bg-gradient-to-b from-green-500 to-blue-500 rounded-full"></div>
                 Excerpt
               </h2>
@@ -342,8 +333,8 @@ const AddBlogPost = () => {
                 {...register("excerpt")}
                 onKeyDown={handleKeyDown}
                 rows={4}
-                className={`w-full px-4 py-3 border rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none ${
-                  errors.excerpt ? "border-red-500" : "border-gray-200"
+                className={`w-full px-4 py-3 bg-white/5 border border-white/20 text-white rounded-xl focus:ring-2 focus:ring-blue-500 focus:border-transparent transition-all duration-200 resize-none placeholder:text-white/50 ${
+                  errors.excerpt ? "border-red-500" : "border-white/20"
                 }`}
                 placeholder="Write a brief summary of your blog post (optional)"
               />
@@ -355,8 +346,8 @@ const AddBlogPost = () => {
             </div>
 
             {/* Content Editor */}
-            <div className="bg-white rounded-2xl shadow-xl p-8">
-              <h2 className="text-xl font-semibold text-gray-800 mb-6 flex items-center gap-2">
+            <div className="bg-black/40 border-white/10 backdrop-blur rounded-xl p-8">
+              <h2 className="text-xl font-semibold text-white mb-6 flex items-center gap-2">
                 <div className="w-2 h-6 bg-gradient-to-b from-purple-500 to-pink-500 rounded-full"></div>
                 Content *
               </h2>
@@ -374,7 +365,7 @@ const AddBlogPost = () => {
             </div>
 
             {/* Action Button */}
-            <div className="bg-white rounded-2xl shadow-xl p-6 sm:p-8">
+            <div className="bg-black/40 border-white/10 backdrop-blur rounded-xl p-6 sm:p-8">
               <div className="flex justify-center">
                 <button
                   type="submit"
@@ -413,18 +404,34 @@ const AddBlogPost = () => {
         </div>
 
         <style jsx global>{`
+          .tiptap {
+            min-height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 12px;
+            padding: 16px;
+            color: #ffffff;
+          }
+          .tiptap:focus {
+            outline: 2px solid #3b82f6;
+            outline-offset: -2px;
+          }
           .ql-editor {
             min-height: 300px;
+            background: rgba(255, 255, 255, 0.05);
+            color: #ffffff;
           }
           .ql-toolbar {
             border-top-left-radius: 12px;
             border-top-right-radius: 12px;
-            border-color: #e5e7eb;
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(0, 0, 0, 0.4);
           }
           .ql-container {
             border-bottom-left-radius: 12px;
             border-bottom-right-radius: 12px;
-            border-color: #e5e7eb;
+            border-color: rgba(255, 255, 255, 0.2);
+            background: rgba(255, 255, 255, 0.05);
           }
         `}</style>
       </div>
