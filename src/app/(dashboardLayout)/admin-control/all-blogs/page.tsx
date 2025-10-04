@@ -21,7 +21,7 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 const AllBlogs = () => {
-  const { blogs, loading, error, refetch } = useBlogs();
+  const { blogs, loading, error } = useBlogs();
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const formatDate = (dateString: string) => {
@@ -48,7 +48,6 @@ const AllBlogs = () => {
       }
 
       toast.success("Blog post deleted successfully!");
-      refetch();
     } catch (error) {
       console.error("Error deleting blog:", error);
       toast.error("Failed to delete blog post");

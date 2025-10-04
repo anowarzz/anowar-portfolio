@@ -51,11 +51,19 @@ export interface IBlogPost {
   author: IBlogAuthor;
 }
 
+export interface IPagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
+
 export interface IBlogListResponse {
   statusCode: number;
   success: boolean;
   message: string;
   data: IBlogPost[];
+  pagination?: IPagination;
 }
 
 export interface ISingleBlogResponse {

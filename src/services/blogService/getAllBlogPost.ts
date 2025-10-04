@@ -3,15 +3,44 @@
 import { useEffect, useState } from "react";
 import { IBlogListResponse, IBlogPost } from "../../types";
 
-export async function getAllBlogs(): Promise<IBlogListResponse> {
+export interface BlogFilters {
+  page?: number;
+  limit?: number;
+  search?: string;
+  isFeatured?: boolean;
+}
+
+export async function getAllBlogs(
+  filters: BlogFilters = {}
+): Promise<IBlogListResponse> {
   try {
-    const response = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/blogs`);
+    const { page = 1, limit = 10, search, isFeatured } = filters;
+
+    const queryParams = new URLSearchParams();
+    queryParams.append("page", page.toString());
+    queryParams.append("limit", limit.toString());
+
+    if (search) {
+      queryParams.append("search", search);
+    }
+
+    if (typeof isFeatured === "boolean") {
+      queryParams.append("isFeatured", isFeatured.toString());
+    }
+
+    const url = `${
+      process.env.NEXT_PUBLIC_BASE_URL
+    }/blogs?${queryParams.toString()}`;
+    console.log("API URL:", url);
+
+    const response = await fetch(url);
 
     if (!response.ok) {
       throw new Error(`Something went wrong: ${response.status}`);
     }
 
     const blogs: IBlogListResponse = await response.json();
+
     return blogs;
   } catch (error) {
     console.error("Error fetching blogs:", error);
@@ -19,31 +48,45 @@ export async function getAllBlogs(): Promise<IBlogListResponse> {
   }
 }
 
-export function useBlogs() {
+export function useBlogs(filters: BlogFilters = {}) {
   const [blogs, setBlogs] = useState<IBlogPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-
-  const fetchBlogs = async () => {
-    try {
-      setLoading(true);
-      setError(null);
-      const data = await getAllBlogs();
-      setBlogs(data.data);
-    } catch (err) {
-      setError(err instanceof Error ? err.message : "An error occurred");
-    } finally {
-      setLoading(false);
-    }
-  };
+  const [pagination, setPagination] = useState<{
+    page: number;
+    limit: number;
+    total: number;
+    totalPages: number;
+  } | null>(null);
 
   useEffect(() => {
-    fetchBlogs();
-  }, []);
+    const fetchBlogs = async () => {
+      try {
+        setLoading(true);
+        setError(null);
 
-  const refetch = () => {
-    fetchBlogs();
-  };
+       
+        const currentFilters: BlogFilters = {
+          page: filters.page || 1,
+          limit: filters.limit || 10,
+          search: filters.search,
+          isFeatured: filters.isFeatured,
+        };
 
-  return { blogs, loading, error, refetch };
+        const data = await getAllBlogs(currentFilters);
+        setBlogs(data.data);
+        if (data.pagination) {
+          setPagination(data.pagination);
+        }
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "An error occurred");
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchBlogs();
+  }, [filters.page, filters.limit, filters.search, filters.isFeatured]);
+
+  return { blogs, loading, error, pagination };
 }
