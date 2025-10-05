@@ -9,7 +9,7 @@ import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 import * as z from "zod";
 
-import AnowarzLogo from "@/assets/images/anowarzz-logo.svg";
+import AnowarzLogo from "@/assets/images/anowarzz.svg";
 import { Button } from "@/components/ui/button";
 import {
   Card,

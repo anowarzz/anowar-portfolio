@@ -36,6 +36,7 @@ const AddBlogPost = () => {
 
   const form = useForm<BlogPostFormData>({
     resolver: zodResolver(blogPostSchema),
+    mode: "onChange",
     defaultValues: {
       title: "",
       content: "",
@@ -52,7 +53,7 @@ const AddBlogPost = () => {
     watch,
     setValue,
     reset,
-    formState: { errors, isSubmitting },
+    formState: { errors, isSubmitting, isValid },
   } = form;
 
   const [tagInput, setTagInput] = useState("");
@@ -102,7 +103,7 @@ const AddBlogPost = () => {
       formDataToSend.append("content", data.content);
       formDataToSend.append("excerpt", data.excerpt || "");
       formDataToSend.append("category", data.category);
-      formDataToSend.append("isFeatured", String(data.isFeatured)); // Send as string: "true" or "false"
+      formDataToSend.append("isFeatured", String(data.isFeatured));
       formDataToSend.append("tags", JSON.stringify(data.tags));
       formDataToSend.append("authorUsername", "anowarzz");
 
@@ -121,7 +122,18 @@ const AddBlogPost = () => {
         }
       );
 
-      const responseData = await response.json();
+      let responseData;
+      try {
+        responseData = await response.json();
+      } catch {
+        // If response is not valid JSON, get text instead
+        const text = await response.text();
+        if (!response.ok) {
+          throw new Error(text || "Failed to create blog post");
+        }
+        // If ok but not JSON, assume success with empty data
+        responseData = { message: text || "Blog post created successfully" };
+      }
 
       if (!response.ok) {
         throw new Error(responseData.message || "Failed to create blog post");
@@ -369,8 +381,8 @@ const AddBlogPost = () => {
               <div className="flex justify-center">
                 <button
                   type="submit"
-                  disabled={isSubmitting || !watch("title")}
-                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-xl hover:from-blue-600 hover:to-purple-700 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm sm:text-base"
+                  disabled={isSubmitting || !isValid}
+                  className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-xl hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm sm:text-base"
                 >
                   {isSubmitting ? (
                     <>
@@ -432,6 +444,19 @@ const AddBlogPost = () => {
             border-bottom-right-radius: 12px;
             border-color: rgba(255, 255, 255, 0.2);
             background: rgba(255, 255, 255, 0.05);
+          }
+
+          /* Custom select dropdown styling */
+          select {
+            color: #ffffff !important;
+          }
+          select option {
+            background-color: rgba(0, 0, 0, 0.9) !important;
+            color: #ffffff !important;
+            padding: 8px !important;
+          }
+          select option:hover {
+            background-color: rgba(59, 130, 246, 0.2) !important;
           }
         `}</style>
       </div>
