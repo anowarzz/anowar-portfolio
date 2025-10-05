@@ -24,6 +24,7 @@ const Navbar = () => {
     { href: "/all-projects", label: "Projects" },
     { href: "/#about", label: "About Me" },
     { href: "/blogs", label: "Blogs" },
+    { href: "/admin-control", label: "Dashboard" },
     { href: "/#contact", label: "Contact Me" },
   ];
 

@@ -4,17 +4,17 @@ import { getSingleProject } from "@/services/projectService/getSingleProjects";
 import { IProject } from "@/types";
 import { ArrowLeft, ExternalLink, Github, Loader2 } from "lucide-react";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+
 import { useEffect, useState } from "react";
 import ImageGallery from "react-image-gallery";
 import "react-image-gallery/styles/css/image-gallery.css";
 import "./image-gallery-custom.css";
 
-const ProjectDetailsPage = () => {
-  const { id } = useParams();
+interface ProjectDetailsPageProps {
+  params: Promise<{ id: string }>;
+}
 
-  console.log(id);
-
+const ProjectDetailsPage = ({ params }: ProjectDetailsPageProps) => {
   const [project, setProject] = useState<IProject | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
@@ -22,8 +22,9 @@ const ProjectDetailsPage = () => {
   useEffect(() => {
     const fetchProject = async () => {
       try {
-        const project = await getSingleProject(id as string);
-        setProject(project);
+        const resolvedParams = await params;
+        const project = await getSingleProject(resolvedParams.id);
+        setProject(project.data);
       } catch (err) {
         if (err instanceof Error && err.message === "Project not found") {
           setError("Project not found");
@@ -37,7 +38,7 @@ const ProjectDetailsPage = () => {
     };
 
     fetchProject();
-  }, [id]);
+  }, [params]);
 
   if (loading) {
     return (
@@ -112,7 +113,7 @@ const ProjectDetailsPage = () => {
             className="inline-flex items-center gap-2 text-blue-400 hover:text-blue-300 transition-colors"
           >
             <ArrowLeft className="w-5 h-5" />
-            Back to Projects
+            Back to All Projects
           </Link>
         </div>
 

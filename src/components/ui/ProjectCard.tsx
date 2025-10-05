@@ -63,7 +63,7 @@ export function ProjectCard({ project }: ProjectCardProps) {
 
           {/* Action Buttons */}
           <div className="flex gap-4">
-            <Link href={`/projects/${project._id}`} className="flex-1">
+            <Link href={`/projects/${project.id}`} className="flex-1">
               <Button className="w-full bg-gradient-to-r from-blue-600 to-cyan-600 hover:from-blue-700 hover:to-cyan-700 text-white font-semibold shadow-lg hover:shadow-xl transition-all duration-300 py-3 cursor-pointer">
                 <ArrowBigRight className="w-5 h-5 mr-2" />
                 Details
