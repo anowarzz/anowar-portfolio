@@ -104,14 +104,14 @@ export default function AdminDashboard() {
                 {stats?.overview.totalProjects || 0}
               </div>
             )}
-            <p className="text-xs text-cyan-400 flex items-center gap-1 mt-1">
+            <div className="text-xs text-cyan-400 flex items-center gap-1 mt-1">
               <BarChart3 className="size-3" />
               {loading ? (
                 <Skeleton className="h-3 w-20 bg-white/10" />
               ) : (
                 `${stats?.projects.recentCount || 0} recent`
               )}
-            </p>
+            </div>
           </CardContent>
         </Card>
 
