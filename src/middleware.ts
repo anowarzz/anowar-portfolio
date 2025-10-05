@@ -14,6 +14,7 @@ export async function middleware(request: NextRequest) {
           headers: {
             Cookie: request.headers.get("cookie") || "",
           },
+          credentials: "include",
         }
       );
 
