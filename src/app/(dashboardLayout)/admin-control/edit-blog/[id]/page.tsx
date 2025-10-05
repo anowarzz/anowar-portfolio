@@ -1,7 +1,7 @@
 "use client";
 
+import TiptapEditor from "@/components/dashboard/TiptapEditor";
 import SingleImageUploader from "@/components/singleImageUploader";
-import TiptapEditor from "@/components/TiptapEditor";
 import { Button } from "@/components/ui/button";
 import {
   Card,

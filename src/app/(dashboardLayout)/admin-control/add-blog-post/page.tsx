@@ -1,6 +1,6 @@
 "use client";
 
-import TiptapEditor from "@/components/TiptapEditor";
+import TiptapEditor from "@/components/dashboard/TiptapEditor";
 import SingleImageUploader from "@/components/singleImageUploader";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";

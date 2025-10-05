@@ -1,6 +1,6 @@
 "use client";
 
-import { ConfirmationDialog } from "@/components/ConfirmationDialog";
+import { ConfirmationDialog } from "@/components/dashboard/ConfirmationDialog";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";

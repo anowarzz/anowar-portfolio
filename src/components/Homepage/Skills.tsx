@@ -5,7 +5,7 @@ import {
   backendSkills,
   databaseSkills,
   frontendSkills,
-} from "@/app/data/skills";
+} from "@/data/skills";
 import { ScrollArea, ScrollBar } from "@/components/ui/scroll-area";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import SkillCard from "../ui/skill-card";

@@ -1,5 +1,5 @@
-import { AppSidebar } from "@/components/AdminSidebar";
-import LogoutButton from "@/components/LogoutButton";
+import { AppSidebar } from "@/components/dashboard/AdminSidebar";
+import LogoutButton from "@/components/dashboard/LogoutButton";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";

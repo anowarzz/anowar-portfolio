@@ -1,4 +1,4 @@
-import ImageGalleryWrapper from "@/components/ImageGalleryWrapper";
+import ImageGalleryWrapper from "@/components/dashboard/ImageGalleryWrapper";
 import { IProject } from "@/types";
 import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import Link from "next/link";
