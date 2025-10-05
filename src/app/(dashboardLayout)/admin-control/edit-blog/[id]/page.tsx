@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
+import { Skeleton } from "@/components/ui/skeleton";
 import { IBlogPost } from "@/types";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { ArrowLeft, Plus, Save, X } from "lucide-react";
@@ -69,8 +70,14 @@ const EditBlog = ({ params }: { params: Promise<{ id: string }> }) => {
     },
   });
 
-  // Watch the arrays to display them
   const tags = watch("tags");
+
+  //
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+    }
+  };
 
   // Fetch blog data on mount
   useEffect(() => {
@@ -185,8 +192,67 @@ const EditBlog = ({ params }: { params: Promise<{ id: string }> }) => {
 
   if (isLoading) {
     return (
-      <div className="flex items-center justify-center min-h-[60vh]">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-blue-500"></div>
+      <div className="space-y-6 p-2 sm:p-4 md:p-6 max-w-4xl w-full mx-auto">
+        {/* Header Skeleton */}
+        <div className="flex items-center gap-3 mb-4">
+          <Skeleton className="h-8 w-20" />
+          <Skeleton className="h-8 w-40" />
+        </div>
+        <Skeleton className="h-5 w-1/2 mb-6" />
+
+        {/* Blog Info Card Skeleton */}
+        <div className="mb-6">
+          <Skeleton className="h-20 w-full rounded-lg" />
+        </div>
+
+        {/* Form Card Skeleton */}
+        <div className="bg-black/40 border-white/10 backdrop-blur rounded-lg p-6 space-y-6">
+          {/* Title */}
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-10 w-full" />
+          </div>
+          {/* Category & Featured */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-24" />
+              <Skeleton className="h-10 w-full" />
+            </div>
+            <div className="space-y-2">
+              <Skeleton className="h-5 w-32" />
+              <Skeleton className="h-6 w-32" />
+            </div>
+          </div>
+          {/* Image Upload */}
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-32 w-full" />
+          </div>
+          {/* Excerpt */}
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-24" />
+            <Skeleton className="h-20 w-full" />
+          </div>
+          {/* Tags */}
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-20" />
+            <Skeleton className="h-10 w-full" />
+            <div className="flex gap-2">
+              <Skeleton className="h-6 w-16 rounded-full" />
+              <Skeleton className="h-6 w-16 rounded-full" />
+            </div>
+          </div>
+          {/* Content Editor */}
+          <div className="space-y-2">
+            <Skeleton className="h-5 w-32" />
+            <Skeleton className="h-40 w-full" />
+          </div>
+          {/* Buttons */}
+          <div className="flex justify-end gap-4 pt-6">
+            <Skeleton className="h-10 w-24" />
+            <Skeleton className="h-10 w-40" />
+          </div>
+        </div>
       </div>
     );
   }
@@ -214,7 +280,7 @@ const EditBlog = ({ params }: { params: Promise<{ id: string }> }) => {
   }
 
   return (
-    <div className="space-y-6 p-6">
+    <div className="space-y-6 p-2 sm:p-4 md:p-6 max-w-4xl w-full mx-auto">
       {/* Header Section */}
       <div className="flex items-center justify-between">
         <div className="space-y-1">
@@ -298,7 +364,7 @@ const EditBlog = ({ params }: { params: Promise<{ id: string }> }) => {
                 <select
                   id="category"
                   {...register("category")}
-                  className="w-full bg-white/5 border border-white/20 text-white rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="w-full  border border-white/20 text-black bg-gray-200 rounded-md px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
                 >
                   <option value="">Select Category</option>
                   <option value="technology">Technology</option>

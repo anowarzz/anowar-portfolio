@@ -24,12 +24,18 @@ export function BlogCard({ blog }: BlogCardProps) {
       <div className="bg-gray-900/95 backdrop-blur-sm border border-gray-700/50 shadow-xl rounded-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:border-blue-500/30">
         {/* Featured Image */}
         <div className="relative overflow-hidden h-48 md:h-64">
-          <Image
-            src={blog.featuredImage}
-            alt={blog.title}
-            fill
-            className="object-cover group-hover:scale-105 transition-transform duration-300"
-          />
+          {blog.featuredImage && blog.featuredImage.trim() !== "" ? (
+            <Image
+              src={blog.featuredImage}
+              alt={blog.title}
+              fill
+              className="object-cover group-hover:scale-105 transition-transform duration-300"
+            />
+          ) : (
+            <div className="w-full h-full bg-gray-800 flex items-center justify-center text-gray-400 text-sm">
+              No Image Available
+            </div>
+          )}
           <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
 
           {/* Featured Badge */}

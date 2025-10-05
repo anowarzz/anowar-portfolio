@@ -21,7 +21,8 @@ import { useState } from "react";
 import { toast } from "sonner";
 
 const AllBlogs = () => {
-  const { blogs, loading, error } = useBlogs();
+  const [refresh, setRefresh] = useState(false);
+  const { blogs, loading, error } = useBlogs({}, refresh);
   const [deletingId, setDeletingId] = useState<string | null>(null);
 
   const formatDate = (dateString: string) => {
@@ -36,7 +37,7 @@ const AllBlogs = () => {
     setDeletingId(blogId);
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${blogId}`,
+        `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/id/${blogId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -48,6 +49,7 @@ const AllBlogs = () => {
       }
 
       toast.success("Blog post deleted successfully!");
+      setRefresh((prev) => !prev); // trigger re-fetch
     } catch (error) {
       console.error("Error deleting blog:", error);
       toast.error("Failed to delete blog post");

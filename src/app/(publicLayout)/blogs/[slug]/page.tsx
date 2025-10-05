@@ -89,7 +89,7 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${resolvedParams.slug}`,
       {
-        next: { revalidate: 300 }, // ISR: Revalidate individual blog every 5 minutes
+        next: { revalidate: 300 }, 
       }
     );
 

@@ -2,6 +2,7 @@
 
 import TiptapEditor from "@/components/dashboard/TiptapEditor";
 import SingleImageUploader from "@/components/singleImageUploader";
+import { Button } from "@/components/ui/button";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
@@ -17,6 +18,7 @@ type BlogPostFormData = {
   category: string;
   tags: string[];
   isFeatured: boolean;
+  featuredImage: File | null;
 };
 
 const blogPostSchema = z.object({
@@ -29,6 +31,9 @@ const blogPostSchema = z.object({
   category: z.string().min(1, "Category is required"),
   tags: z.array(z.string()),
   isFeatured: z.boolean(),
+  featuredImage: z
+    .custom<File | null>((file) => file instanceof File || file === null)
+    .refine((file) => file !== null, "Featured image is required"),
 }) satisfies z.ZodType<BlogPostFormData>;
 
 const AddBlogPost = () => {
@@ -44,6 +49,7 @@ const AddBlogPost = () => {
       isFeatured: false,
       tags: [],
       category: "",
+      featuredImage: null,
     },
   });
 
@@ -57,10 +63,9 @@ const AddBlogPost = () => {
   } = form;
 
   const [tagInput, setTagInput] = useState("");
-  const [featuredImageFile, setFeaturedImageFile] = useState<File | null>(null);
 
   const handleImageChange = (file: File | null) => {
-    setFeaturedImageFile(file);
+    setValue("featuredImage", file);
   };
 
   const handleAddTag = (e: React.KeyboardEvent<HTMLInputElement>) => {
@@ -92,7 +97,7 @@ const AddBlogPost = () => {
 
   const onSubmit = async (data: BlogPostFormData) => {
     // Show loading toast
-    const loadingToast = toast.loading("Creating blog post...");
+    const loadingToast = toast.loading("Creating blog post. Please wait ...");
 
     try {
       // Prepare form data
@@ -108,8 +113,8 @@ const AddBlogPost = () => {
       formDataToSend.append("authorUsername", "anowarzz");
 
       // Append image file if exists
-      if (featuredImageFile) {
-        formDataToSend.append("featuredImage", featuredImageFile);
+      if (data.featuredImage) {
+        formDataToSend.append("featuredImage", data.featuredImage);
       }
 
       // Send data to API
@@ -126,12 +131,11 @@ const AddBlogPost = () => {
       try {
         responseData = await response.json();
       } catch {
-        // If response is not valid JSON, get text instead
         const text = await response.text();
         if (!response.ok) {
           throw new Error(text || "Failed to create blog post");
         }
-        // If ok but not JSON, assume success with empty data
+
         responseData = { message: text || "Blog post created successfully" };
       }
 
@@ -149,7 +153,6 @@ const AddBlogPost = () => {
       // Reset form and clear image
       reset();
       setTagInput("");
-      setFeaturedImageFile(null);
 
       // Redirect to all-blogs page after a short delay
       setTimeout(() => {
@@ -280,12 +283,17 @@ const AddBlogPost = () => {
 
                 <div className="md:col-span-2">
                   <label className="block text-sm font-medium text-white mb-2">
-                    Featured Image
+                    Featured Image <span className="text-red-500">*</span>
                   </label>
                   <SingleImageUploader
                     onImageChange={handleImageChange}
                     initialImageUrl={undefined}
                   />
+                  {errors.featuredImage && (
+                    <p className="text-red-500 text-sm mt-1">
+                      {errors.featuredImage.message}
+                    </p>
+                  )}
                 </div>
 
                 <div className="md:col-span-2">
@@ -379,7 +387,7 @@ const AddBlogPost = () => {
             {/* Action Button */}
             <div className="bg-black/40 border-white/10 backdrop-blur rounded-xl p-6 sm:p-8">
               <div className="flex justify-center">
-                <button
+                <Button
                   type="submit"
                   disabled={isSubmitting || !isValid}
                   className="w-full sm:w-auto px-6 sm:px-8 py-3 sm:py-4 bg-gradient-to-r from-blue-500 to-cyan-600 text-white rounded-xl hover:from-blue-600 hover:to-cyan-700 transition-all duration-200 font-medium disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2 text-sm sm:text-base"
@@ -409,7 +417,7 @@ const AddBlogPost = () => {
                       <span className="sm:hidden">Create Post</span>
                     </>
                   )}
-                </button>
+                </Button>
               </div>
             </div>
           </form>

@@ -48,7 +48,7 @@ export async function getAllBlogs(
   }
 }
 
-export function useBlogs(filters: BlogFilters = {}) {
+export function useBlogs(filters: BlogFilters = {}, refresh?: boolean) {
   const [blogs, setBlogs] = useState<IBlogPost[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
@@ -85,7 +85,13 @@ export function useBlogs(filters: BlogFilters = {}) {
     };
 
     fetchBlogs();
-  }, [filters.page, filters.limit, filters.search, filters.isFeatured]);
+  }, [
+    filters.page,
+    filters.limit,
+    filters.search,
+    filters.isFeatured,
+    refresh,
+  ]);
 
   return { blogs, loading, error, pagination };
 }
