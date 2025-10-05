@@ -1,5 +1,4 @@
-import { ConfirmationDialog } from '@/components/ConfirmationDialog';
-import { ReactNode } from 'react';
+import { ReactNode } from "react";
 export interface IProject {
   id: number;
   title: string;
@@ -75,7 +74,6 @@ export interface ISingleBlogResponse {
   data: IBlogPost;
 }
 
-
 export interface ConfirmationDialogProps {
   children: ReactNode;
   description: string;
@@ -85,4 +83,35 @@ export interface ConfirmationDialogProps {
   confirmText?: string;
   cancelText?: string;
   loadingText?: string;
+}
+
+export interface IAdminStats {
+  overview: {
+    totalBlogs: number;
+    totalProjects: number;
+    totalViews: number;
+  };
+  blogs: {
+    total: number;
+    featured: number;
+    totalViews: number;
+    recentCount: number;
+    topViewed: {
+      id: number;
+      title: string;
+      slug: string;
+      views: number;
+    };
+  };
+  projects: {
+    total: number;
+    recentCount: number;
+  };
+}
+
+export interface IAdminStatsResponse {
+  statusCode: number;
+  success: boolean;
+  message: string;
+  data: IAdminStats;
 }
