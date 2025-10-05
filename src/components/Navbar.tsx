@@ -13,18 +13,43 @@ import { Github, Linkedin, Menu } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const pathname = usePathname();
+
+  useEffect(() => {
+    const verifyToken = async () => {
+      try {
+        const response = await fetch(
+          `${process.env.NEXT_PUBLIC_BASE_URL}/admin/verify-token`,
+          {
+            credentials: "include",
+          }
+        );
+        if (response.ok) {
+          const data = await response.json();
+          setIsAuthenticated(data);
+        }
+      } catch (error) {
+        console.error("Token verification failed:", error);
+        setIsAuthenticated(false);
+      }
+    };
+
+    verifyToken();
+  }, []);
 
   const navLinks = [
     { href: "/", label: "Home" },
     { href: "/all-projects", label: "Projects" },
     { href: "/#about", label: "About Me" },
     { href: "/blogs", label: "Blogs" },
-    { href: "/admin-control", label: "Dashboard" },
+    ...(isAuthenticated
+      ? [{ href: "/admin-control", label: "Dashboard" }]
+      : []),
     { href: "/#contact", label: "Contact Me" },
   ];
 

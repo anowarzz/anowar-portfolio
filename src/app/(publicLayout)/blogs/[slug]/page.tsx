@@ -52,11 +52,10 @@ export async function generateMetadata({
 // Generate static params for ISR
 export async function generateStaticParams() {
   try {
-    // Fetch all blog slugs at build time for pre-generation
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/all?limit=100`,
       {
-        next: { revalidate: 3600 }, // Revalidate slug list every hour
+        next: { revalidate: 3600 }, //
       }
     );
 
@@ -89,7 +88,7 @@ const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
     const res = await fetch(
       `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${resolvedParams.slug}`,
       {
-        next: { revalidate: 300 }, 
+        next: { revalidate: 300 },
       }
     );
 
