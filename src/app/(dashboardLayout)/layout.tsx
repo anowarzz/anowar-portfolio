@@ -1,8 +1,8 @@
 import { AppSidebar } from "@/components/AdminSidebar";
+import LogoutButton from "@/components/LogoutButton";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
 import { SidebarProvider, SidebarTrigger } from "@/components/ui/sidebar";
-import { LogOut } from "lucide-react";
 import Link from "next/link";
 
 export default function AdminLayout({
@@ -42,17 +42,7 @@ export default function AdminLayout({
                       Home Page
                     </Button>
                   </Link>
-                  <Button
-                    // onClick={handleLogOut}
-                    variant="destructive"
-                    size="sm"
-                    aria-label="Log Out"
-                    title="Log Out"
-                    className="mr-4"
-                  >
-                    Logout
-                    <LogOut />
-                  </Button>
+                  <LogoutButton />
                 </div>
               </div>
             </header>
