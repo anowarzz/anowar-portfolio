@@ -5,22 +5,29 @@ export async function middleware(request: NextRequest) {
 
   console.log(pathname);
 
-  // Protect admin-control routes
   if (pathname.startsWith("/admin-control")) {
     try {
+      const cookieHeader = request.headers.get("cookie");
+
+      console.log("Cookie header:", cookieHeader); 
+
       const response = await fetch(
         `https://anowarzz-portfolio-server.vercel.app/api/admin/verify-token`,
         {
+          method: "GET",
           headers: {
-            Cookie: request.headers.get("cookie") || "",
+            Cookie: cookieHeader || "",
+            "Content-Type": "application/json",
           },
           credentials: "include",
+          cache: "no-store",
         }
       );
 
+      console.log("Response status:", response.status);
+
       if (!response.ok) {
         console.log("Failed to verify token");
-
         return NextResponse.redirect(new URL("/admin-login", request.url));
       }
 
