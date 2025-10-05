@@ -1,13 +1,9 @@
-"use client";
-
 import { Button } from "@/components/ui/button";
-import { Skeleton } from "@/components/ui/skeleton";
-import { getSingleBlog } from "@/services/blogService/getSingleBlogPost";
 import { IBlogPost } from "@/types";
 import { ArrowLeft, Calendar, Clock, Eye, User } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+import { Metadata } from "next/types";
 
 interface BlogDetailPageProps {
   params: Promise<{
@@ -15,30 +11,101 @@ interface BlogDetailPageProps {
   }>;
 }
 
-const BlogDetailPage = ({ params }: BlogDetailPageProps) => {
-  const [blog, setBlog] = useState<IBlogPost | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+export const dynamicParams = true;
 
-  useEffect(() => {
-    const fetchBlog = async () => {
-      try {
-        setLoading(true);
-        setError(null);
-        const resolvedParams = await params;
-        console.log("Blog detail page received slug:", resolvedParams.slug);
-        const response = await getSingleBlog(resolvedParams.slug);
-        setBlog(response.data);
-      } catch (err) {
-        console.error("Error in blog detail page:", err);
-        setError(err instanceof Error ? err.message : "An error occurred");
-      } finally {
-        setLoading(false);
+// meta data
+export async function generateMetadata({
+  params,
+}: BlogDetailPageProps): Promise<Metadata> {
+  try {
+    const resolvedParams = await params;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${resolvedParams.slug}`,
+      {
+        next: { revalidate: 300 },
       }
-    };
+    );
 
-    fetchBlog();
-  }, [params]);
+    if (!res.ok) {
+      return {
+        title: "Blog Not Found",
+        description: "The requested blog post could not be found.",
+      };
+    }
+
+    const data = await res.json();
+    const blog = data.data as IBlogPost;
+
+    return {
+      title: `${blog.title} | Anowar's Portfolio`,
+      description: blog.excerpt,
+    };
+  } catch (error) {
+    console.error("Error generating metadata:", error);
+    return {
+      title: "Blog | Anowar's Portfolio",
+      description: "Read the latest blog posts and insights.",
+    };
+  }
+}
+
+// Generate static params for ISR
+export async function generateStaticParams() {
+  try {
+    // Fetch all blog slugs at build time for pre-generation
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/all?limit=100`,
+      {
+        next: { revalidate: 3600 }, // Revalidate slug list every hour
+      }
+    );
+
+    if (!res.ok) {
+      console.error("Failed to fetch blogs for generateStaticParams");
+      return [];
+    }
+
+    const data = await res.json();
+    const blogs = data.data as IBlogPost[];
+
+    // Return array of params for static generation
+    return blogs.map((blog) => ({
+      slug: blog.slug,
+    }));
+  } catch (error) {
+    console.error("Error in generateStaticParams:", error);
+    return [];
+  }
+}
+
+const BlogDetailPage = async ({ params }: BlogDetailPageProps) => {
+  let blog: IBlogPost | null = null;
+  let error: string | null = null;
+
+  try {
+    const resolvedParams = await params;
+    console.log("Blog detail page received slug:", resolvedParams.slug);
+
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/${resolvedParams.slug}`,
+      {
+        next: { revalidate: 300 }, // ISR: Revalidate individual blog every 5 minutes
+      }
+    );
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        throw new Error("Blog post not found");
+      }
+      throw new Error(`Failed to fetch blog: ${res.status}`);
+    }
+
+    const data = await res.json();
+    blog = data.data as IBlogPost;
+  } catch (err) {
+    console.error("Error in blog detail page:", err);
+    error = err instanceof Error ? err.message : "An error occurred";
+  }
 
   const formatDate = (dateString: string) => {
     return new Date(dateString).toLocaleDateString("en-US", {
@@ -58,51 +125,17 @@ const BlogDetailPage = ({ params }: BlogDetailPageProps) => {
     });
   };
 
-  if (loading) {
-    return (
-      <div className="min-h-screen bg-gradient-to-br from-gray-900 via-gray-800 to-black py-20">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          {/* Back Button Skeleton */}
-          <Skeleton className="h-10 w-32 bg-gray-800 mb-8" />
-
-          {/* Header Skeleton */}
-          <div className="mb-12">
-            <Skeleton className="h-8 bg-gray-800 mb-4" />
-            <Skeleton className="h-12 bg-gray-800 mb-6" />
-            <div className="flex items-center gap-6 mb-6">
-              <Skeleton className="h-6 w-32 bg-gray-800" />
-              <Skeleton className="h-6 w-32 bg-gray-800" />
-              <Skeleton className="h-6 w-24 bg-gray-800" />
-            </div>
-            <div className="flex flex-wrap gap-2 mb-6">
-              <Skeleton className="h-6 w-16 bg-gray-800 rounded-full" />
-              <Skeleton className="h-6 w-20 bg-gray-800 rounded-full" />
-              <Skeleton className="h-6 w-18 bg-gray-800 rounded-full" />
-            </div>
-          </div>
-
-          {/* Featured Image Skeleton */}
-          <Skeleton className="h-96 bg-gray-800 mb-12 rounded-lg" />
-
-          {/* Content Skeleton */}
-          <div className="space-y-4">
-            {[...Array(8)].map((_, index) => (
-              <Skeleton key={index} className="h-4 bg-gray-800" />
-            ))}
-          </div>
-        </div>
-      </div>
-    );
-  }
-
-  if (error) {
+  // Handle error state for server components
+  if (error || !blog) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-900 via-gray-800 to-black">
         <div className="text-center">
           <h1 className="text-4xl md:text-6xl font-bold text-white mb-4">
             Oops!
           </h1>
-          <p className="text-xl text-red-400 mb-4">{error}</p>
+          <p className="text-xl text-red-400 mb-4">
+            {error || "Blog post not found"}
+          </p>
           <p className="text-lg text-gray-400 mb-8">
             The blog post you&apos;re looking for doesn&apos;t exist or has been
             removed.
@@ -116,10 +149,6 @@ const BlogDetailPage = ({ params }: BlogDetailPageProps) => {
         </div>
       </div>
     );
-  }
-
-  if (!blog) {
-    return null;
   }
 
   return (

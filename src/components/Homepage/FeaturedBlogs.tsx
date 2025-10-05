@@ -1,21 +1,35 @@
-"use client";
 import { BlogCard } from "@/components/ui/BlogCard";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { useBlogs } from "@/services/blogService/getAllBlogPost";
+import { IBlogPost } from "@/types";
 import { ArrowBigRight } from "lucide-react";
 import Link from "next/link";
-import { Button } from "../ui/button";
 
-const FeaturedBlogs = () => {
-  const { blogs, loading, error } = useBlogs();
+const FeaturedBlogs = async () => {
+  let blogs: IBlogPost[] = [];
+  let error: string | null = null;
 
-  if (loading) {
-    return <LoadingSpinner fullScreen text="Loading Blogs" />;
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/blogs/all?limit=4`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch blogs: ${res.status}`);
+    }
+
+    const data = await res.json();
+    blogs = data.data as IBlogPost[];
+  } catch (err) {
+    console.error("Error fetching blogs:", err);
+    error = err instanceof Error ? err.message : "Failed to load blogs";
   }
+
 
   if (error) {
     return (
-      <section className="min-h-screen w-full relative bg-black py-16">
+      <section className="w-full relative bg-black py-16">
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -24,15 +38,20 @@ const FeaturedBlogs = () => {
           }}
         />
         <div className="relative z-10 container mx-auto px-4">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-6">
+              Featured{"  "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                Blogs
+              </span>{" "}
+            </h2>
+          </div>
+          <div className="flex items-center justify-center min-h-[200px]">
+            <div className="text-center bg-red-500/10 border border-red-500/20 rounded-lg p-8 max-w-md">
               <p className="text-red-400 text-lg mb-4">{error}</p>
-              <Button
-                onClick={() => window.location.reload()}
-                className="px-6 py-3 bg-myBlue text-white rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                Try Again
-              </Button>
+              <p className="text-white/60 text-sm">
+                Please refresh the page or try again later
+              </p>
             </div>
           </div>
         </div>

@@ -1,20 +1,35 @@
-"use client";
 import { ProjectCard } from "@/components/ui/ProjectCard";
-import { LoadingSpinner } from "@/components/ui/loading-spinner";
-import { useProjects } from "@/services/projectService/getAllProjects";
+import { IProject } from "@/types";
 import { ArrowBigRight } from "lucide-react";
 import Link from "next/link";
 
-const MyProjects = () => {
-  const { projects, loading, error } = useProjects();
+const MyProjects = async () => {
+  let projects: IProject[] = [];
+  let error: string | null = null;
 
-  if (loading) {
-    return <LoadingSpinner fullScreen text="Loading Projects" />;
+  try {
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/projects`,
+      {
+        cache: "no-store",
+      }
+    );
+
+    if (!res.ok) {
+      throw new Error(`Failed to fetch projects: ${res.status}`);
+    }
+
+    const data = await res.json();
+    projects = data.data as IProject[];
+  } catch (err) {
+    console.error("Error fetching projects:", err);
+    error = err instanceof Error ? err.message : "Failed to load projects";
   }
 
+  // Handle error state for server components
   if (error) {
     return (
-      <section className="min-h-screen w-full relative bg-black py-16">
+      <section className="w-full relative bg-black py-16">
         <div
           className="absolute inset-0 z-0"
           style={{
@@ -23,15 +38,20 @@ const MyProjects = () => {
           }}
         />
         <div className="relative z-10 container mx-auto px-4">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
+          <div className="text-center mb-16">
+            <h2 className="text-4xl font-bold text-white mb-6">
+              My{"  "}
+              <span className="text-transparent bg-clip-text bg-gradient-to-r from-blue-400 to-cyan-400">
+                Projects
+              </span>{" "}
+            </h2>
+          </div>
+          <div className="flex items-center justify-center min-h-[200px]">
+            <div className="text-center bg-red-500/10 border border-red-500/20 rounded-lg p-8 max-w-md">
               <p className="text-red-400 text-lg mb-4">{error}</p>
-              <button
-                onClick={() => window.location.reload()}
-                className="px-6 py-3 bg-myBlue text-white rounded-lg hover:bg-blue-600 transition-colors"
-              >
-                Try Again
-              </button>
+              <p className="text-white/60 text-sm">
+                Please refresh the page or try again later
+              </p>
             </div>
           </div>
         </div>

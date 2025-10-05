@@ -1,67 +1,42 @@
-"use client";
-
-import { getSingleProject } from "@/services/projectService/getSingleProjects";
+import ImageGalleryWrapper from "@/components/ImageGalleryWrapper";
 import { IProject } from "@/types";
-import { ArrowLeft, ExternalLink, Github, Loader2 } from "lucide-react";
+import { ArrowLeft, ExternalLink, Github } from "lucide-react";
 import Link from "next/link";
-
-import { useEffect, useState } from "react";
-import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css";
 import "./image-gallery-custom.css";
 
 interface ProjectDetailsPageProps {
   params: Promise<{ id: string }>;
 }
 
-const ProjectDetailsPage = ({ params }: ProjectDetailsPageProps) => {
-  const [project, setProject] = useState<IProject | null>(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState<string | null>(null);
+const ProjectDetailsPage = async ({ params }: ProjectDetailsPageProps) => {
+  let project: IProject | null = null;
+  let error: string | null = null;
 
-  useEffect(() => {
-    const fetchProject = async () => {
-      try {
-        const resolvedParams = await params;
-        const project = await getSingleProject(resolvedParams.id);
-        setProject(project.data);
-      } catch (err) {
-        if (err instanceof Error && err.message === "Project not found") {
-          setError("Project not found");
-        } else {
-          setError("Failed to load project");
-        }
-        console.error("Error fetching project:", err);
-      } finally {
-        setLoading(false);
+  try {
+    const resolvedParams = await params;
+    const res = await fetch(
+      `${process.env.NEXT_PUBLIC_BASE_URL}/projects/${resolvedParams.id}`,
+      {
+        cache: "no-store",
       }
-    };
-
-    fetchProject();
-  }, [params]);
-
-  if (loading) {
-    return (
-      <section className="min-h-screen w-full relative bg-black pt-8 pb-16">
-        <div
-          className="absolute inset-0 z-0"
-          style={{
-            background:
-              "radial-gradient(ellipse 80% 60% at 50% 0%, rgba(99, 102, 241, 0.15), transparent 70%), #000000",
-          }}
-        />
-        <div className="relative z-10 container mx-auto px-4">
-          <div className="flex items-center justify-center min-h-[400px]">
-            <div className="text-center">
-              <Loader2 className="w-12 h-12 animate-spin text-blue-400 mx-auto mb-4" />
-              <p className="text-white/70 text-lg">Loading project...</p>
-            </div>
-          </div>
-        </div>
-      </section>
     );
+
+    if (!res.ok) {
+      if (res.status === 404) {
+        throw new Error("Project not found");
+      } else {
+        throw new Error(`Failed to fetch project: ${res.status}`);
+      }
+    }
+
+    const data = await res.json();
+    project = data.data as IProject;
+  } catch (err) {
+    console.error("Error fetching project:", err);
+    error = err instanceof Error ? err.message : "Failed to load project";
   }
 
+  // Handle error state for server components
   if (error || !project) {
     return (
       <section className="min-h-screen w-full relative bg-black pt-8 pb-16">
@@ -135,24 +110,9 @@ const ProjectDetailsPage = ({ params }: ProjectDetailsPageProps) => {
         {/* Project Gallery */}
         <div className="mb-12">
           <div className="max-w-4xl mx-auto">
-            <ImageGallery
-              items={allImages.map((image, index) => ({
-                original: image,
-                thumbnail: image,
-                originalAlt: `${project.title} - Image ${index + 1}`,
-                thumbnailAlt: `${project.title} - Thumbnail ${index + 1}`,
-                originalClass: "rounded-2xl",
-                thumbnailClass: "rounded-lg",
-              }))}
-              showPlayButton={false}
-              showFullscreenButton={true}
-              showIndex={true}
-              showNav={false}
-              slideDuration={300}
-              slideInterval={3000}
-              thumbnailPosition="bottom"
-              useBrowserFullscreen={false}
-              additionalClass="custom-gallery"
+            <ImageGalleryWrapper
+              images={allImages}
+              projectTitle={project.title}
             />
           </div>
         </div>
