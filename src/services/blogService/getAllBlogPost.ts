@@ -30,7 +30,7 @@ export async function getAllBlogs(
 
     const url = `${
       process.env.NEXT_PUBLIC_BASE_URL
-    }/blogs?${queryParams.toString()}`;
+    }/blogs/all?${queryParams.toString()}`;
     console.log("API URL:", url);
 
     const response = await fetch(url);
@@ -65,7 +65,6 @@ export function useBlogs(filters: BlogFilters = {}) {
         setLoading(true);
         setError(null);
 
-       
         const currentFilters: BlogFilters = {
           page: filters.page || 1,
           limit: filters.limit || 10,

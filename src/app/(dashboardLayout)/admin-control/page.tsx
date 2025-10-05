@@ -25,24 +25,24 @@ import Link from "next/link";
 
 export default function AdminDashboard() {
   const { stats, loading, error } = useAdminStats();
-  if (error) {
-    return (
-      <div className="flex items-center justify-center min-h-[400px]">
-        <Card className="bg-red-500/10 border-red-500/20 p-6">
-          <div className="flex items-center gap-3 text-red-400">
-            <AlertCircle className="size-5" />
-            <div>
-              <h3 className="font-semibold">Error loading dashboard</h3>
-              <p className="text-sm opacity-80">{error}</p>
-            </div>
-          </div>
-        </Card>
-      </div>
-    );
-  }
 
   return (
     <div className="space-y-8">
+      {/* Error Banner */}
+      {error && (
+        <Card className="bg-red-500/10 border-red-500/20">
+          <CardContent className="pt-6">
+            <div className="flex items-center gap-3 text-red-400">
+              <AlertCircle className="size-5" />
+              <div>
+                <h3 className="font-semibold">Error loading dashboard</h3>
+                <p className="text-sm opacity-80">{error}</p>
+              </div>
+            </div>
+          </CardContent>
+        </Card>
+      )}
+
       {/* Welcome Section */}
       <div className="space-y-4">
         <div>
@@ -97,7 +97,7 @@ export default function AdminDashboard() {
             <FolderKanban className="h-5 w-5 text-blue-400" />
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {loading || error ? (
               <Skeleton className="h-8 w-16 bg-white/10" />
             ) : (
               <div className="text-3xl font-bold text-white">
@@ -106,7 +106,7 @@ export default function AdminDashboard() {
             )}
             <div className="text-xs text-cyan-400 flex items-center gap-1 mt-1">
               <BarChart3 className="size-3" />
-              {loading ? (
+              {loading || error ? (
                 <Skeleton className="h-3 w-20 bg-white/10" />
               ) : (
                 `${stats?.projects.recentCount || 0} recent`
@@ -123,7 +123,7 @@ export default function AdminDashboard() {
             <FileText className="h-5 w-5 text-cyan-400" />
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {loading || error ? (
               <Skeleton className="h-8 w-16 bg-white/10" />
             ) : (
               <div className="text-3xl font-bold text-white">
@@ -132,7 +132,7 @@ export default function AdminDashboard() {
             )}
             <p className="text-xs text-green-400 flex items-center gap-1 mt-1">
               <Star className="size-3" />
-              {loading ? (
+              {loading || error ? (
                 <Skeleton className="h-3 w-20 bg-white/10" />
               ) : (
                 `${stats?.blogs.featured || 0} featured`
@@ -149,7 +149,7 @@ export default function AdminDashboard() {
             <Eye className="h-5 w-5 text-purple-400" />
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {loading || error ? (
               <Skeleton className="h-8 w-16 bg-white/10" />
             ) : (
               <div className="text-3xl font-bold text-white">
@@ -158,7 +158,7 @@ export default function AdminDashboard() {
             )}
             <p className="text-xs text-purple-300 flex items-center gap-1 mt-1">
               <TrendingUp className="size-3" />
-              {loading ? (
+              {loading || error ? (
                 <Skeleton className="h-3 w-20 bg-white/10" />
               ) : (
                 `${stats?.blogs.totalViews || 0} blog views`
@@ -175,16 +175,16 @@ export default function AdminDashboard() {
             <Users className="h-5 w-5 text-orange-400" />
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {loading || error ? (
               <Skeleton className="h-8 w-16 bg-white/10" />
             ) : (
               <div className="text-3xl font-bold text-white">
-                {stats?.blogs.topViewed.views || 0}
+                {stats?.blogs.topViewed?.views || 0}
               </div>
             )}
             <p className="text-xs text-orange-300 flex items-center gap-1 mt-1">
               <Eye className="size-3" />
-              {loading ? (
+              {loading || error ? (
                 <Skeleton className="h-3 w-20 bg-white/10" />
               ) : (
                 "views on top blog"
@@ -208,11 +208,12 @@ export default function AdminDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {loading ? (
+            {loading || error ? (
               <div className="space-y-3">
                 <Skeleton className="h-4 w-full bg-white/10" />
                 <Skeleton className="h-4 w-3/4 bg-white/10" />
                 <Skeleton className="h-4 w-1/2 bg-white/10" />
+                <Skeleton className="h-4 w-2/3 bg-white/10" />
               </div>
             ) : (
               <div className="space-y-4">
@@ -257,7 +258,7 @@ export default function AdminDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            {loading ? (
+            {loading || error ? (
               <div className="space-y-3">
                 <Skeleton className="h-4 w-full bg-white/10" />
                 <Skeleton className="h-3 w-3/4 bg-white/10" />
@@ -296,10 +297,11 @@ export default function AdminDashboard() {
             </CardDescription>
           </CardHeader>
           <CardContent className="space-y-4">
-            {loading ? (
+            {loading || error ? (
               <div className="space-y-3">
                 <Skeleton className="h-4 w-full bg-white/10" />
                 <Skeleton className="h-4 w-2/3 bg-white/10" />
+                <Skeleton className="h-3 w-1/2 bg-white/10" />
               </div>
             ) : (
               <div className="space-y-4">
@@ -359,7 +361,7 @@ export default function AdminDashboard() {
                   <span className="text-white font-medium">
                     Manage Projects
                   </span>
-                  {loading ? (
+                  {loading || error ? (
                     <Skeleton className="h-3 w-20 bg-white/10 mt-1" />
                   ) : (
                     <span className="text-white/60 text-xs">
@@ -381,7 +383,7 @@ export default function AdminDashboard() {
                 <FileText className="size-5 text-cyan-400" />
                 <div className="flex flex-col">
                   <span className="text-white font-medium">Manage Blogs</span>
-                  {loading ? (
+                  {loading || error ? (
                     <Skeleton className="h-3 w-20 bg-white/10 mt-1" />
                   ) : (
                     <span className="text-white/60 text-xs">
@@ -402,7 +404,7 @@ export default function AdminDashboard() {
                   <span className="text-white font-medium">
                     Total Portfolio Views
                   </span>
-                  {loading ? (
+                  {loading || error ? (
                     <Skeleton className="h-4 w-16 bg-white/10 mt-1" />
                   ) : (
                     <span className="text-purple-300 font-bold text-lg">
