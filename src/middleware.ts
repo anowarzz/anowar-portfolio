@@ -9,7 +9,7 @@ export async function middleware(request: NextRequest) {
   if (pathname.startsWith("/admin-control")) {
     try {
       const response = await fetch(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/admin/verify-token`,
+        `https://anowarzz-portfolio-server.vercel.app/api/admin/verify-token`,
         {
           headers: {
             Cookie: request.headers.get("cookie") || "",
