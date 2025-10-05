@@ -8,12 +8,9 @@ const MyProjects = async () => {
   let error: string | null = null;
 
   try {
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BASE_URL}/projects`,
-      {
-        cache: "no-store",
-      }
-    );
+    const res = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/projects`, {
+      next: { revalidate: 60 },
+    });
 
     if (!res.ok) {
       throw new Error(`Failed to fetch projects: ${res.status}`);

@@ -74,7 +74,7 @@ export const LoadingSpinner = ({
               </span>
             </h2>
             <p className="text-white/70 text-sm md:text-base">
-              Please wait while we load the content
+              Please wait , something cool is coming up!
             </p>
           </div>
 

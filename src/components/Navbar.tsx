@@ -1,6 +1,6 @@
 "use client";
 
-import navLogo from "@/assets/images/anowarzz-logo.svg";
+import navLogo from "@/assets/images/anowarzz.svg";
 import { Button } from "@/components/ui/button";
 import {
   Sheet,
